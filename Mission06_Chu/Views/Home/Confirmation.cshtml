@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Collection
+
+
+<!--This is a page to show Thank you after user submited the movie collection form-->
+@if (Model.Rating == "R")
+{
+    <h1>We recommend you not to watch @Model.Title again!</h1>
+}
+
+else
+{
+
+    <h2>@Model.Title is Added. Thank you.</h2>
+
+}
+
