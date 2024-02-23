@@ -7,40 +7,114 @@
 @model Mission06_Chu.Models.Collection
 
 <!--This is movie Collection page with a form for user to enter the moive to the database-->
-<h1>Movie Collection</h1>
 
-<form method="post">
+<!-- Header Start -->
+<div class="container-fluid bg-primary py-5 mb-5 page-header">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="display-3 text-white animated slideInDown">Enter Movie Collection</h1>
+                <nav aria-label="breadcrumb">
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
 
-    <label asp-for="Category">Category:</label><br>
-    <input asp-for="Category" required /><br>
+<!-- Form Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Add Data</h6>
+            <h1 class="mb-5">Movie Collection</h1>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                <h5>Add the movie into the database</h5>
+                <p class="mb-4">Enter Your Movie into the Database: Use this form to submit details about your movie to our database. Provide information such as the title, director, cast, genre, release year, and a brief synopsis to ensure your movie is accurately represented in our collection.</p>
 
-    <label asp-for="Title">Title:</label><br>
-    <input asp-for="Title" required /><br>
+            </div>
 
-    <label asp-for="Year">Year:</label><br>
-    <input asp-for="Year" min="1900" max="2099" required /><br>
+            <div class="col-lg-4 col-md-12 wow fadeInUp" data-wow-delay="0.5s">
+                <form method="post">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="hidden" asp-for="MovieId" />
 
-    <label asp-for="Director">Director:</label><br>
-    <input asp-for="Director" required /><br>
+                            <label asp-for="CategoryId" class="form-label">Category:</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.Categories, "CategoryId", "CategoryName"))" required>
+                                <option value="">Select Category</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Title" class="form-label">Title:</label>
+                            <input asp-for="Title" class="form-control" required />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Year" class="form-label">Year:</label>
+                            <input asp-for="Year" class="form-control" min="1888" max="2099" required />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Director" class="form-label">Director:</label>
+                            <input asp-for="Director" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Rating" class="form-label">Rating:</label>
+                            <select asp-for="Rating" class="form-select">
+                                <option value="">Select Rating</option>
+                                <option value="NR">NR</option>
+                                <option value="R">R</option>
+                                <option value="TV-14">TV-14</option>
+                                <option value="UR">UR</option>
+                                <option value="PG-13">PG-13</option>
+                                <option value="TV-PG">TV-PG</option>
+                                <option value="G">G</option>
+                                <option value="PG">PG</option>
+                                <option value="TV-Y7">TV-Y7</option>
+                                <option value="TV-G">TV-G</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Edited" class="form-label">Edited:</label>
+                            <div class="form-check">
+                                <input type="radio" asp-for="Edited" class="form-check-input" value="true" required>
+                                <label class="form-check-label">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" asp-for="Edited" class="form-check-input" value="false" required>
+                                <label class="form-check-label">No</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="CopiedToPlex" class="form-label">Copied to Plex:</label>
+                            <div class="form-check">
+                                <input type="radio" asp-for="CopiedToPlex" class="form-check-input" value="true" required>
+                                <label class="form-check-label">Yes</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" asp-for="CopiedToPlex" class="form-check-input" value="false" required>
+                                <label class="form-check-label">No</label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="LentTo" class="form-label">Lent To:</label>
+                            <input asp-for="LentTo" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label asp-for="Notes" class="form-label">Notes (max 25 characters):</label>
+                            <input asp-for="Notes" class="form-control" maxlength="25" />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
 
-    <label asp-for="Rating">Rating:</label><br>
-    <select asp-for="Rating" required>
-        <option value="">Select Rating</option>
-        <option value="G">G</option>
-        <option value="PG">PG</option>
-        <option value="PG-13">PG-13</option>
-        <option value="R">R</option>
-    </select><br>
+                    <div asp-validation-summary="All"></div>
+                </form>
 
-    <label asp-for="Edited">Edited:</label><br>
-    <input type="radio" asp-for="Edited" value="true">Yes
-    <input type="radio" asp-for="Edited" value="false">No<br>
-
-    <label asp-for="LentTo">Lent To:</label><br>
-    <input asp-for="LentTo" /><br>
-
-    <label asp-for="Notes">Notes (max 25 characters):</label><br>
-    <input asp-for="Notes" maxlength="25" /><br><br />
-
-    <button type="submit">Submit</button>
-</form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Form End -->

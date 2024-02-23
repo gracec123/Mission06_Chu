@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Mission06_Chu.Models;
+using SQLitePCL;
 using System.Diagnostics;
 
 
@@ -9,8 +11,8 @@ namespace Mission06_Chu.Controllers
     public class HomeController : Controller
     {
         private MovieCollectionContext _context;
-        public HomeController(MovieCollectionContext temp) 
-        { 
+        public HomeController(MovieCollectionContext temp)
+        {
             _context = temp;
         }
 
@@ -30,7 +32,10 @@ namespace Mission06_Chu.Controllers
         [HttpGet]
         public IActionResult MovieCollection()
         {
-            return View();
+            ViewBag.Categories = _context.Categories.ToList();
+            //.OrderBy(x => x.Category)
+
+            return View("MovieCollection", new Collection());
         }
 
 
@@ -38,9 +43,91 @@ namespace Mission06_Chu.Controllers
         [HttpPost]
         public IActionResult MovieCollection(Collection response)
         {
-            _context.Collections.Add(response); //Add record to the database
-            _context.SaveChanges();
-            return View("Confirmation", response);
+            if (ModelState.IsValid)
+            {
+                _context.Movies.Add(response); //Add record to the database
+                _context.SaveChanges();
+                return View("Confirmation", response);
+            }
+            
+            else // Invalid data
+            {
+                foreach (var modelStateKey in ViewData.ModelState.Keys)
+                {
+                    var value = ViewData.ModelState[modelStateKey];
+                    foreach (var error in value.Errors)
+                    {
+                        Console.WriteLine($"Key: {modelStateKey}, Error: {error.ErrorMessage}");
+                        // Log these errors or inspect them
+                        // You can use Debug.WriteLine(error.ErrorMessage); for a quick check
+                    }
+                }
+
+                // Repopulate ViewBag.Categories before returning to the view
+                ModelState.Remove("CategoryId");
+                ViewBag.Categories = _context.Categories.ToList();
+                return View(response);
+
+            }
+
         }
+
+        public IActionResult MovieList()
+        {
+            //var movies = _context.Movies.FromSqlRaw("SELECT * FROM Movies");
+            var movies = _context.Movies
+                .Include(m => m.Category)
+                .ToList();
+                // .OrderBy(x => x.Title).ToList();
+
+            return View(movies);
+
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var recordToEdit = _context.Movies
+                .Single(x => x.MovieId == id);
+
+            ViewBag.Categories = _context.Categories
+                .OrderBy(x => x.CategoryName)
+                .ToList();
+
+            return View("MovieCollection", recordToEdit);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Collection updatedInfo)
+        {
+            _context.Update(updatedInfo);
+            _context.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int id) 
+        { 
+            var recordToDelete = _context.Movies
+                 .Single(x => x.MovieId == id);
+
+            return View(recordToDelete);
+
+        }
+
+        [HttpPost]
+        public IActionResult Delete(Collection deleteinfo)
+        {
+            _context.Movies.Remove(deleteinfo);
+            _context.SaveChanges();
+
+            return RedirectToAction("MovieList");
+        }
+
+
     }
+
+
+    
 }

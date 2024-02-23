@@ -1,0 +1,72 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@* @model Collection *@
+@model List<Collection>
+
+
+
+<!-- Header Start -->
+<div class="container-fluid bg-primary py-5 mb-5 page-header">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="display-3 text-white animated slideInDown">Movie Table</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Movie Table Start -->
+<div class="container-xxl py-5 category">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <h6 class="section-title bg-white text-center text-primary px-3">Movie Database</h6>
+            <h1 class="mb-5">See all Data</h1>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <table class="table table-bordered">
+                <thead class="fw-bold">
+                    <tr>
+                        <td>Category</td>
+                        <td>Title</td>
+                        <td>Year</td>
+                        <td>Director</td>
+                        <td>Rating</td>
+                        <td>Edited</td>
+                        <td>LentTo</td>
+                        <td>CopiedToPlex</td>
+                        <td>Notes</td>
+                        <td>Edit</td>
+                        <td>Delete</td>
+                    </tr>
+                </thead>
+
+                @foreach (var x in Model)
+                {
+                    <tbody>
+                        <tr>
+                            <td>@x.Category.CategoryName</td>
+                            <td>@x.Title</td>
+                            <td>@x.Year</td>
+                            <td>@x.Director</td>
+                            <td>@x.Rating</td>
+                            <td>@x.Edited</td>
+                            <td>@x.LentTo</td>
+                            <td>@x.CopiedToPlex</td>
+                            <td>@x.Notes</td>
+                            <td><a class="btn btn-info" asp-controller="Home" asp-action="Edit" asp-route-id="@x.MovieId">Edit</a></td>
+                            <td><a class="btn btn-danger" asp-controller="Home" asp-action="Delete" asp-route-id="@x.MovieId">Delete</a></td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Movie Table End -->

@@ -9,7 +9,10 @@ namespace Mission06_Chu.Models
         {
         }
 
-        public DbSet<Collection> Collections { get; set; }
+        public DbSet<Collection> Movies { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+
+
 
     }
 }
